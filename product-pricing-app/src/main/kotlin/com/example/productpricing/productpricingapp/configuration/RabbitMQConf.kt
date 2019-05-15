@@ -1,4 +1,4 @@
-package com.example.productinventory.productinventoryapp.configuration
+package com.example.productpricing.productpricingapp.configuration
 
 import org.springframework.amqp.core.Binding
 import org.springframework.amqp.core.BindingBuilder
@@ -9,17 +9,18 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Component
 
-const val queueName = "ecom-queue-inventory"
+
+const val queueName = "ecom-queue-pricing"
 const val exchangeName = "ecom-exchange"
-const val routingKey = "ecom-inventory-routing"
+const val routingKey = "ecom-pricing-routing"
 
 @Component
 @Configuration
 @EnableRabbit
-class RabbitMQConfig {
+class RabbitMQConf {
 
     @Bean
-    fun queue(): Queue{
+    fun queue(): Queue {
         return Queue(queueName)
     }
 

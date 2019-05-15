@@ -2,6 +2,8 @@ package com.example.search.searchapp.event
 
 import com.example.product.productapp.event.ProductCreatedOrUpdateEvent
 import com.example.productinventory.productinventoryapp.event.ProductQuantityCreatedUpdatedEvent
+import com.example.productpricing.productpricingapp.event.ProductPriceAddedUpdatedEvent
+import com.example.search.searchapp.configuration.queueName_inventory
 import com.example.search.searchapp.configuration.queueName_pricing
 import com.example.search.searchapp.configuration.queueName_product
 import com.example.search.searchapp.model.SearchResponse
@@ -27,7 +29,7 @@ class MessageReceiver @Autowired constructor(val searchResponseService: SearchRe
         println("Search response created $createdSearchResult")
     }
 
-    @RabbitListener(queues = [queueName_pricing])
+    @RabbitListener(queues = [queueName_inventory])
     fun productQuantityCreatedUpdated(productQuantityCreatedUpdatedEvent: ProductQuantityCreatedUpdatedEvent) {
         println("Product Quantity Created or Updated Event received $productQuantityCreatedUpdatedEvent")
         val searchResultFromDB =
@@ -42,6 +44,22 @@ class MessageReceiver @Autowired constructor(val searchResponseService: SearchRe
             println("No Product found for this event")
         }
 
+    }
+
+    @RabbitListener(queues = [queueName_pricing])
+    fun productPriceCreatedUpdated(productPriceAddedUpdatedEvent: ProductPriceAddedUpdatedEvent) {
+        println("Product Price Created or Updated Event received $productPriceAddedUpdatedEvent")
+        val searchResultFromDB =
+                searchResponseService.getSearchResponse(productPriceAddedUpdatedEvent.productPrice.productId)
+        if (searchResultFromDB != null) {
+            searchResponseService.createSearchResult(
+                    searchResultFromDB.copy(productPrice =
+                    productPriceAddedUpdatedEvent.productPrice.price)
+            )
+            println("Search response updated with price  ${productPriceAddedUpdatedEvent.productPrice.price}")
+        } else {
+            println("No Product found for this event")
+        }
     }
 
 }

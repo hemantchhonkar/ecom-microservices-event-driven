@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component
 const val queueName_pricing = "ecom-queue-pricing"
 const val routingKey_pricing = "ecom-pricing-routing"
 
+const val queueName_inventory = "ecom-queue-inventory"
+const val routingKey_inventory = "ecom-inventory-routing"
+
 const val queueName_product= "ecom-queue-product"
 const val exchangeName = "ecom-exchange"
 const val routingKey_product = "ecom-product-routing"
@@ -32,6 +35,11 @@ class RabbitMQConfig {
     }
 
     @Bean
+    fun queue3(): Queue{
+        return Queue(queueName_inventory)
+    }
+
+    @Bean
     fun exchange(): TopicExchange {
         return TopicExchange(exchangeName)
     }
@@ -45,6 +53,12 @@ class RabbitMQConfig {
     @Bean
     fun binding2(exchange: TopicExchange): Binding {
         println("Creating queue binding pricing")
+        return BindingBuilder.bind(queue2()).to(exchange).with(routingKey_pricing)
+    }
+
+    @Bean
+    fun binding3(exchange: TopicExchange): Binding {
+        println("Creating queue binding inventory")
         return BindingBuilder.bind(queue2()).to(exchange).with(routingKey_pricing)
     }
 }
