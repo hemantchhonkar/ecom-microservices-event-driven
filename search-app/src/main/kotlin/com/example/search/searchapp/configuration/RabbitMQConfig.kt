@@ -59,6 +59,6 @@ class RabbitMQConfig {
     @Bean
     fun binding3(exchange: TopicExchange): Binding {
         println("Creating queue binding inventory")
-        return BindingBuilder.bind(queue2()).to(exchange).with(routingKey_pricing)
+        return BindingBuilder.bind(queue2()).to(exchange).with(routingKey_inventory)
     }
 }
