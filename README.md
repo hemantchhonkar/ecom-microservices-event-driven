@@ -67,7 +67,7 @@ POST http://localhost:8084/productPrices
 - Product Order
 
 ```
-GET/POST http://llocalhost:8085/orders
+GET/POST http://localhost:8085/orders
 
 {
 	"orderId" : 12311,
